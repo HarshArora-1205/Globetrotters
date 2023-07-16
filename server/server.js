@@ -59,6 +59,11 @@ app.get('/', (req,res) => {
     res.send("Hello From Globetrotters!");
 })
 
+app.use((err, req, res, next) => {
+    res.status(500).send(err);
+})
+
+
 app.listen(3001, () => {
     console.log("Serving on port 3001");
 })

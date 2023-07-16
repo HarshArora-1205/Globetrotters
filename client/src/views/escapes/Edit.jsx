@@ -31,6 +31,7 @@ const New = () => {
                 .catch((err) => {
                     console.log("Error in editing Escape: Edit JSX");
                     console.log(err);
+                    navigate('/error');
                 });
     };
 

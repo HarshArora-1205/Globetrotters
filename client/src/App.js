@@ -6,6 +6,7 @@ import Escapes from "./views/escapes/Escapes";
 import Show from "./views/escapes/Show";
 import Edit from "./views/escapes/Edit";
 import New from "./views/escapes/New";
+import Error from "./views/Error";
 
 axios.defaults.baseURL = "http://localhost:3001";
 
@@ -19,6 +20,7 @@ function App() {
           <Route path="/escapes/:id" element={<Show />}/>
           <Route path="/escapes/:id/edit" element={<Edit />}/>
           <Route path="/escapes/new" element={<New />}/>
+          <Route path="/error" element={<Error />}/>
         </Route>
       </Routes>
     </BrowserRouter>
