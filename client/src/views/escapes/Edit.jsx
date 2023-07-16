@@ -1,6 +1,9 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
+import { Form, Field } from 'react-final-form'
 import { useNavigate, useParams } from 'react-router';
+import * as Validators from "../utils/validators";
+import ValidationDiv from '../components/ValidationDiv';
 
 const New = () => {
 
@@ -16,16 +19,8 @@ const New = () => {
             })
     }, [id]);
 
-    const onFormSubmit = async (e) => {
-        e.preventDefault();
-        const escape = {
-            title: e.target[0].value,
-            location: e.target[1].value,
-            image: e.target[2].value,
-            price: e.target[3].value,
-            description: e.target[4].value,
-        };
-        console.log(escape);
+    const onFormSubmit = async (values) => {
+        const escape = {...values};
         await axios
                 .put(`/escapes/${id}`, escape)
                 .then((res) => {
@@ -38,6 +33,143 @@ const New = () => {
                     console.log(err);
                 });
     };
+
+    const EditForm = () => (
+        <Form
+          onSubmit={onFormSubmit}
+          render={({ handleSubmit, invalid, pristine }) => (
+            <form onSubmit={handleSubmit}>
+                <Field name="title" validate={Validators.required} initialValue={escape?.title || ""}>
+                    {({ input, meta }) => (
+                        <div className='mb-3'>
+                            <label 
+                                htmlFor="title" 
+                                className="form-label"
+                            >
+                                Title
+                            </label>
+                            <input 
+                                {...input}
+                                type="text"
+                                id="title" 
+                                name="escape[title]" 
+                                className={`form-control ${meta.touched ? (meta.error ? "is-invalid" : "is-valid") : ""}`}
+                            />
+                            <ValidationDiv meta={meta}/>
+                        </div>
+                    )}
+                </Field>
+
+                <Field name="location" validate={Validators.required} initialValue={escape?.location || ""}>
+                    {({ input, meta }) => (
+                        <div className='mb-3'>
+                            <label 
+                                htmlFor="location" 
+                                className="form-label"
+                            >
+                                Location
+                            </label>
+                            <input 
+                                {...input}
+                                type="text"
+                                id="location" 
+                                name="escape[location]" 
+                                className={`form-control ${meta.touched ? (meta.error ? "is-invalid" : "is-valid") : ""}`}
+                            />
+                            <ValidationDiv meta={meta}/>
+                        </div>
+                    )}
+                </Field>
+
+                <Field name="image" validate={Validators.required} initialValue={escape?.image || ""}>
+                    {({ input, meta }) => (
+                        <div className='mb-3'>
+                            <label 
+                                htmlFor="image" 
+                                className="form-label"
+                            >
+                                Image Url
+                            </label>
+                            <input 
+                                {...input}
+                                type="text"
+                                id="image" 
+                                name="escape[image]" 
+                                className={`form-control ${meta.touched ? (meta.error ? "is-invalid" : "is-valid") : ""}`}
+                            />
+                            <ValidationDiv meta={meta}/>
+                        </div>
+                    )}
+                </Field>
+
+                <Field name="price" 
+                    validate={Validators.chainValidators(
+                        Validators.required,
+                        Validators.isNum,
+                        Validators.isGreater(10)
+                    )}
+                    initialValue={escape?.price || ""}
+                >
+                    {({ input, meta }) => (
+                        <div className='mb-3'>
+                            <label 
+                                htmlFor="price" 
+                                className="form-label"
+                            >
+                                Escape Price
+                            </label>
+                            <div className="input-group">
+                                <span 
+                                    className="input-group-text" 
+                                    id="price-label"
+                                >
+                                    ₹
+                                </span>
+                                <input 
+                                    {...input}
+                                    type="text" 
+                                    className={`form-control ${meta.touched ? (meta.error ? "is-invalid" : "is-valid") : ""}`} 
+                                    id="price" 
+                                    placeholder="0.00" 
+                                    aria-label="price"
+                                    aria-describedby="price-label" 
+                                    name="escape[price]"
+                                />
+                                <ValidationDiv meta={meta}/>
+                            </div>
+                        </div>
+                    )}
+                </Field>
+
+                <Field name="description" validate={Validators.required}  initialValue={escape?.description || ""}>
+                    {({ input, meta }) => (
+                        <div className='mb-3'>
+                            <label 
+                                htmlFor="description" 
+                                className="form-label"
+                            >
+                                Description
+                            </label>
+                            <textarea 
+                                {...input}
+                                type="text"
+                                id="description" 
+                                name="escape[description]" 
+                                className={`form-control ${meta.touched ? (meta.error ? "is-invalid" : "is-valid") : ""}`}
+                            />
+                            <ValidationDiv meta={meta}/>
+                        </div>
+                    )}
+                </Field>
+
+                <div className="mb-3">
+                    <button type="submit" className='btn btn-success' disabled={invalid || pristine}>Submit</button>
+                </div>      
+            </form>
+          )}
+        />
+    );
+
   return (
     <>
         <div className="row">
@@ -45,35 +177,7 @@ const New = () => {
                 Edit Escape!
             </h1>
             <div className="col-6 offset-3">
-                <form onSubmit={onFormSubmit}>
-                    <div className='mb-3'>
-                        <label htmlFor="title" className="form-label">Title</label>
-                        <input type="text" id="title" name="escape[title]" className="form-control" defaultValue={escape?.title || ""}/>
-                    </div>
-                    <div className='mb-3'>
-                        <label htmlFor="location" className="form-label">Location</label>
-                        <input type="text" id="location" name="escape[location]" className="form-control"  defaultValue={escape?.location || ""}/>
-                    </div>
-                    <div className='mb-3'>
-                        <label htmlFor="image" className="form-label">Image Url</label>
-                        <input type="text" id="image" name="escape[image]" className="form-control"  defaultValue={escape?.image || ""}/>
-                    </div>
-                    <div className="mb-3">
-                        <label className="form-label" htmlFor="price">Escape Price</label>
-                        <div className="input-group">
-                            <span className="input-group-text" id="price-label">₹</span>
-                            <input type="text" className="form-control" id="price" placeholder="0.00" aria-label="price"
-                                aria-describedby="price-label" name="escape[price]"  defaultValue={escape?.price || ""} required />
-                        </div>
-                    </div>
-                    <div className='mb-3'>
-                        <label htmlFor="description" className="form-label">Description</label>
-                        <textarea type="text" id="description" name="escape[description]" className="form-control"  defaultValue={escape?.description || ""}/>
-                    </div>
-                    <div className="mb-3">
-                        <button className='btn btn-success'>Submit</button>
-                    </div>
-                </form>
+                <EditForm />
                 <a href="/escapes">Back to Escapes!</a>
             </div>
         </div>
