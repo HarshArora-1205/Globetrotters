@@ -38,15 +38,32 @@ const Show = () => {
             {
                 escape ? (
                     <>
-                        <h1>{ escape.title }</h1>
-                        <h4>{ escape.location }</h4>
+                        <div className="row">
+                            <div className="col-6 offset-3">
+                                <div className="card mb-3">
+                                    <img src={escape.image} className="card-img-top" alt={escape.title}/>
+                                    <div className="card-body">
+                                        <h5 className="card-title">{escape.title}</h5>
+                                        <p className="card-text">{escape.description}</p>
+                                    </div>
+                                    <ul className="list-group list-group-flush">
+                                        <li className="list-group-item text-muted">{escape.location}</li>
+                                        <li className="list-group-item">₹{escape.price} per person / day</li>
+                                    </ul>
+                                    <div className="card-body">
+                                        <a href={`/escapes/${id}/edit`} className="card-link btn btn-info">Edit</a>
+                                        <button onClick={onDelete} className='btn btn-danger ms-2'>Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
                     </>
                 ) : (
                     <h2>No Escape found!</h2>
                 )
             }
-            <button onClick={onDelete}>Delete Escape!</button>
-            <a href={`/escapes/${id}/edit`}>Edit Escape!</a>
             <a href="/escapes">Back to Escapes!</a>
         </>
     )

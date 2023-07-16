@@ -19,6 +19,7 @@ const seedDB = async() => {
             location: `${escapes[i].city}, ${escapes[i].state}`,
             title: `${escapes[i].title}`,
             description: `${escapes[i].description}`,
+            image: `${escapes[i].image}`,
             price,
         });
         await escape.save();

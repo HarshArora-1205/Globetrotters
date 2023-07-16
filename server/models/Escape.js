@@ -3,9 +3,10 @@ const Schema = mongoose.Schema;
 
 const EscapeSchema = new Schema({
     title: String,
-    price: String,
+    price: Number,
     description: String,
-    location: String
+    location: String,
+    image: String
 });
 
 export default mongoose.model('Escape', EscapeSchema);
