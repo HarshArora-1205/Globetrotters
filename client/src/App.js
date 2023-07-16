@@ -1,5 +1,6 @@
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import axios from 'axios';
+import Boilerplate from "./views/layouts/Boilerplate";
 import Home from "./views/Home";
 import Escapes from "./views/escapes/Escapes";
 import Show from "./views/escapes/Show";
@@ -13,10 +14,12 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />}/>
-        <Route path="/escapes" element={<Escapes />}/>
-        <Route path="/escapes/:id" element={<Show />}/>
-        <Route path="/escapes/:id/edit" element={<Edit />}/>
-        <Route path="/escapes/new" element={<New />}/>
+        <Route element={<Boilerplate />}>
+          <Route path="/escapes" element={<Escapes />}/>
+          <Route path="/escapes/:id" element={<Show />}/>
+          <Route path="/escapes/:id/edit" element={<Edit />}/>
+          <Route path="/escapes/new" element={<New />}/>
+        </Route>
       </Routes>
     </BrowserRouter>
   );
