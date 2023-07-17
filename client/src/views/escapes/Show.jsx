@@ -37,7 +37,18 @@ const Show = () => {
     }, [id]);
 
     const onReviewSubmit = (values) => {
-        const payload = {review: {...values}} 
+        const payload = {review: {...values}};
+        axios
+            .post(`/escapes/${id}/reviews`, payload)
+            .then((res) => {
+                if(res.status === 200){
+                    console.log(res.data);
+                }
+            })
+            .catch((err) => {
+                console.log("Error in posting Review: Show JSX");
+                console.log(err);
+            }); 
     }
 
     const ReviewForm = () => {

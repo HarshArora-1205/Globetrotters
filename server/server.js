@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import Escape from "./models/Escape.js";
+import Review from "./models/Review.js";
 import cors from "cors";
 import catchAsync from "./utils/catchAsync.js";
 import ExpressError from "./utils/ExpressError.js";
@@ -69,6 +70,15 @@ app.delete('/escapes/:id', catchAsync(async (req,res) => {
         res.status(404).send("Escape Not Found")
     }
 }))
+
+app.post('/escapes/:id/reviews', async (req,res) => {
+    const escape = await Escape.findById(req.params.id);
+    const review = new Review(req.body.review);
+    escape.reviews.push(review);
+    await review.save();
+    await escape.save();
+    res.send({escape});
+})
 
 app.get('/', (req,res) => {
     res.send("Hello From Globetrotters!");
