@@ -5,7 +5,7 @@ import Review from "./models/Review.js";
 import cors from "cors";
 import catchAsync from "./utils/catchAsync.js";
 import ExpressError from "./utils/ExpressError.js";
-import { escapeSchema } from "./joiSchemas.js";
+import { escapeSchema, reviewSchema } from "./joiSchemas.js";
 
 mongoose.connect('mongodb://0.0.0.0:27017/globetrotters');
 const db = mongoose.connection;
@@ -31,6 +31,17 @@ app.use(express.urlencoded({ extended: true }));
 
 const validateEscape = (req, res, next) => {
     const {error} = escapeSchema.validate(req.body)
+    if(error){
+        const msg = error.details.map((el) => el.message).join(',');
+        throw new ExpressError(msg, 400);
+    }
+    else{
+        next();
+    }
+}
+
+const validateReview = (req, res, next) => {
+    const {error} = reviewSchema.validate(req.body);
     if(error){
         const msg = error.details.map((el) => el.message).join(',');
         throw new ExpressError(msg, 400);
@@ -71,7 +82,7 @@ app.delete('/escapes/:id', catchAsync(async (req,res) => {
     }
 }))
 
-app.post('/escapes/:id/reviews', async (req,res) => {
+app.post('/escapes/:id/reviews', validateReview, async (req,res) => {
     const escape = await Escape.findById(req.params.id);
     const review = new Review(req.body.review);
     escape.reviews.push(review);

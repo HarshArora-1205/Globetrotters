@@ -59,7 +59,7 @@ const Show = () => {
                   onSubmit={onReviewSubmit}
                   render={({ handleSubmit, invalid }) => (
                     <form onSubmit={handleSubmit}>
-                        <Field name="rating">
+                        <Field name="rating" defaultValue={4}>
                             {({ input, meta }) => (
                                 <div className='mb-3'>
                                     <label 
