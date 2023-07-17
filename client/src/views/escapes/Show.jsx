@@ -25,6 +25,10 @@ const Show = () => {
     }
 
     useEffect(() => {
+        getEscape(id);
+    }, [id]);
+
+    function getEscape(id) {
         axios
             .get(`/escapes/${id}`)
             .then((res) => {
@@ -34,7 +38,7 @@ const Show = () => {
                 console.log("Error in displaying Escape: Show JSX");
                 console.log(err);
             });
-    }, [id]);
+    }
 
     const onReviewSubmit = (values) => {
         const payload = {review: {...values}};
@@ -42,7 +46,7 @@ const Show = () => {
             .post(`/escapes/${id}/reviews`, payload)
             .then((res) => {
                 if(res.status === 200){
-                    console.log(res.data);
+                    getEscape(id);
                 }
             })
             .catch((err) => {
@@ -113,6 +117,24 @@ const Show = () => {
         )
     }
 
+    const ReviewList = () => 
+        // escape.reviews
+        escape.reviews?.map((review, index) => {
+            return (
+                <div className="mb-3 card" key={index}>
+                    <div className="card-body">
+                        <h5 className="card-title">
+                            Rating: {review.rating}
+                        </h5>
+                        <p className="card-text">
+                            {review.body}
+                        </p>
+                    </div>
+                </div>
+            )
+        });
+    
+
     return (
         <>
             {
@@ -138,6 +160,7 @@ const Show = () => {
                             </div>
                             <div className="col-6">
                                 <ReviewForm />
+                                <ReviewList />
                             </div>
                         </div>
 

@@ -63,7 +63,7 @@ app.post('/escapes/new', validateEscape, catchAsync(async (req, res) => {
 }));
 
 app.get('/escapes/:id', catchAsync(async (req,res) => {
-    const escape = await Escape.findById(req.params.id);
+    const escape = await Escape.findById(req.params.id).populate("reviews");
     res.send({escape});
 }))
 
