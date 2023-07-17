@@ -6,7 +6,13 @@ const EscapeSchema = new Schema({
     price: Number,
     description: String,
     location: String,
-    image: String
+    image: String,
+    reviews: [
+        { 
+            type: Schema.Types.ObjectId, 
+            ref: "Review" 
+        }
+    ],
 });
 
 export default mongoose.model('Escape', EscapeSchema);
