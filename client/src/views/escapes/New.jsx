@@ -10,7 +10,7 @@ const New = () => {
     const onFormSubmit = async (values) => {
         const escape = {...values};
         await axios
-                .post("/escapes/new", escape)
+                .post("/escapes/new", {escape})
                 .then((res) => {
                     if(res.status === 200){
                         navigate(`/escapes/${res.data}`);
@@ -92,8 +92,8 @@ const New = () => {
 
                 <Field name="price" validate={Validators.chainValidators(
                     Validators.required,
-                    Validators.isNum,
-                    Validators.isGreater(10)
+                    // Validators.isNum,
+                    // Validators.isGreater(10)
                 )}>
                     {({ input, meta }) => (
                         <div className='mb-3'>

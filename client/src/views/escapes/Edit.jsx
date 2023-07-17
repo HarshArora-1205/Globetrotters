@@ -22,7 +22,7 @@ const New = () => {
     const onFormSubmit = async (values) => {
         const escape = {...values};
         await axios
-                .put(`/escapes/${id}`, escape)
+                .put(`/escapes/${id}`, {escape})
                 .then((res) => {
                     if(res.status === 200){
                         navigate(`/escapes/${res.data}`)

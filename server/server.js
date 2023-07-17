@@ -4,7 +4,7 @@ import Escape from "./models/Escape.js";
 import cors from "cors";
 import catchAsync from "./utils/catchAsync.js";
 import ExpressError from "./utils/ExpressError.js";
-
+import { escapeSchema } from "./joiSchemas.js";
 
 mongoose.connect('mongodb://0.0.0.0:27017/globetrotters');
 const db = mongoose.connection;
@@ -28,13 +28,24 @@ app.use(express.urlencoded({ extended: true }));
 
 
 
+const validateEscape = (req, res, next) => {
+    const {error} = escapeSchema.validate(req.body)
+    if(error){
+        const msg = error.details.map((el) => el.message).join(',');
+        throw new ExpressError(msg, 400);
+    }
+    else{
+        next();
+    }
+}
+ 
 app.get('/escapes', catchAsync(async(req,res) => {
     const escapes = await Escape.find({});
     res.send({escapes});
 }))
 
-app.post('/escapes/new', catchAsync(async (req, res) => {
-    const escape = new Escape(req.body);
+app.post('/escapes/new', validateEscape, catchAsync(async (req, res) => {
+    const escape = new Escape(req.body.escape);
     await escape.save();
     res.send(escape._id);
 }));
@@ -44,8 +55,8 @@ app.get('/escapes/:id', catchAsync(async (req,res) => {
     res.send({escape});
 }))
 
-app.put('/escapes/:id', catchAsync(async (req, res) => {
-    const escape = await Escape.findByIdAndUpdate(req.params.id, {...req.body});
+app.put('/escapes/:id', validateEscape, catchAsync(async (req, res) => {
+    const escape = await Escape.findByIdAndUpdate(req.params.id, {...req.body.escape});
     res.send(escape._id);
 }))
 
