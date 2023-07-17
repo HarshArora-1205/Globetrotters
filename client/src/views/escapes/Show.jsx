@@ -1,6 +1,9 @@
 import React, { useEffect, useState} from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router';
+import { Form, Field } from 'react-final-form'
+import * as Validators from "../utils/validators";
+
 
 const Show = () => {
     const navigate = useNavigate();
@@ -33,13 +36,79 @@ const Show = () => {
             });
     }, [id]);
 
+    const onReviewSubmit = (values) => {
+        const payload = {review: {...values}} 
+    }
+
+    const ReviewForm = () => {
+        return (
+            <>
+                <h2>Leave a Review</h2>
+                <Form
+                  onSubmit={onReviewSubmit}
+                  render={({ handleSubmit, invalid }) => (
+                    <form onSubmit={handleSubmit}>
+                        <Field name="rating">
+                            {({ input, meta }) => (
+                                <div className='mb-3'>
+                                    <label 
+                                        htmlFor="rating" 
+                                        className="form-label"
+                                    >
+                                        Rating
+                                    </label>
+                                    <input 
+                                        {...input}
+                                        type="range"
+                                        id="rating" 
+                                        name="review[rating]" 
+                                        className="form-range"
+                                        min="1"
+                                        max="5"
+                                    />
+                                </div>
+                            )}
+                        </Field>
+                        <Field name="body" validate={Validators.required}>
+                            {({ input, meta }) => (
+                                <div className='mb-3'>
+                                    <label 
+                                        htmlFor="body" 
+                                        className="form-label"
+                                    >
+                                        Review
+                                    </label>
+                                    <textarea 
+                                        {...input}
+                                        type="text"
+                                        id="body" 
+                                        name="review[body]" 
+                                        className={`form-control ${meta.touched ? (meta.error ? "is-invalid" : "is-valid") : ""}`}
+                                        cols="30"
+                                        rows="5"
+                                    />
+                                </div>
+                            )}
+                        </Field>
+
+
+                        <div className="mb-3">
+                            <button type="submit" className='btn btn-success' disabled={invalid}>Add Review</button>
+                        </div>      
+                    </form>
+                )}
+                />
+            </>
+        )
+    }
+
     return (
         <>
             {
                 escape ? (
                     <>
                         <div className="row">
-                            <div className="col-6 offset-3">
+                            <div className="col-6">
                                 <div className="card mb-3">
                                     <img src={escape.image} className="card-img-top" alt={escape.title}/>
                                     <div className="card-body">
@@ -55,6 +124,9 @@ const Show = () => {
                                         <button onClick={onDelete} className='btn btn-danger ms-2'>Delete</button>
                                     </div>
                                 </div>
+                            </div>
+                            <div className="col-6">
+                                <ReviewForm />
                             </div>
                         </div>
 
