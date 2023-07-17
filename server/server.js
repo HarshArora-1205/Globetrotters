@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import Escape from "./models/Escape.js";
 import cors from "cors";
 import catchAsync from "./utils/catchAsync.js";
+import ExpressError from "./utils/ExpressError.js";
 
 
 mongoose.connect('mongodb://0.0.0.0:27017/globetrotters');
@@ -62,8 +63,13 @@ app.get('/', (req,res) => {
     res.send("Hello From Globetrotters!");
 })
 
+app.all("*", (req, res, next) => {
+    next(new ExpressError('Page Not Found!', 404));
+})
+
 app.use((err, req, res, next) => {
-    res.status(500).send(err);
+    const { statusCode = 500, message = "Something went wrong!" } = err;
+    res.status(statusCode).send(message);
 })
 
 
