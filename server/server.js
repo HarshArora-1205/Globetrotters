@@ -1,5 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
+import session from "express-session";
 import cors from "cors";
 import ExpressError from "./utils/ExpressError.js";
 import escapes from "./routes/escapes.js";
@@ -17,8 +18,21 @@ const app = express();
 
 const corsOptions = {
     origin: "http://localhost:3000",
+    credentials: true,
 }
 
+const sessionConfig = {
+    secret: "thisshouldbeabettersecret!",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+    }
+}
+
+app.use(session(sessionConfig));
 app.use(cors(corsOptions));
 
 app.use(express.json());
