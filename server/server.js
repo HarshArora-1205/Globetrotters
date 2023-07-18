@@ -1,10 +1,11 @@
 import express from "express";
 import mongoose from "mongoose";
 import Escape from "./models/Escape.js";
+import Review from "./models/Review.js";
 import cors from "cors";
 import catchAsync from "./utils/catchAsync.js";
 import ExpressError from "./utils/ExpressError.js";
-import { escapeSchema } from "./joiSchemas.js";
+import { escapeSchema, reviewSchema } from "./joiSchemas.js";
 
 mongoose.connect('mongodb://0.0.0.0:27017/globetrotters');
 const db = mongoose.connection;
@@ -38,6 +39,17 @@ const validateEscape = (req, res, next) => {
         next();
     }
 }
+
+const validateReview = (req, res, next) => {
+    const {error} = reviewSchema.validate(req.body);
+    if(error){
+        const msg = error.details.map((el) => el.message).join(',');
+        throw new ExpressError(msg, 400);
+    }
+    else{
+        next();
+    }
+}
  
 app.get('/escapes', catchAsync(async(req,res) => {
     const escapes = await Escape.find({});
@@ -51,7 +63,7 @@ app.post('/escapes/new', validateEscape, catchAsync(async (req, res) => {
 }));
 
 app.get('/escapes/:id', catchAsync(async (req,res) => {
-    const escape = await Escape.findById(req.params.id);
+    const escape = await Escape.findById(req.params.id).populate("reviews");
     res.send({escape});
 }))
 
@@ -69,6 +81,22 @@ app.delete('/escapes/:id', catchAsync(async (req,res) => {
         res.status(404).send("Escape Not Found")
     }
 }))
+
+app.post('/escapes/:id/reviews', validateReview, async (req,res) => {
+    const escape = await Escape.findById(req.params.id);
+    const review = new Review(req.body.review);
+    escape.reviews.push(review);
+    await review.save();
+    await escape.save();
+    res.send({escape});
+})
+
+app.delete('/escapes/:id/reviews/:reviewId', async (req,res) => {
+    const {id, reviewId} = req.params;
+    await Escape.findByIdAndUpdate(id, {$pull: { reviews: reviewId}});
+    await Review.findByIdAndDelete(reviewId);
+    res.status(200).send("Review Deleted");
+})
 
 app.get('/', (req,res) => {
     res.send("Hello From Globetrotters!");
