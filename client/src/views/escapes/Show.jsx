@@ -55,6 +55,20 @@ const Show = () => {
             }); 
     }
 
+    const onReviewDelete = (reviewId) => {
+        axios
+        .delete(`/escapes/${id}/reviews/${reviewId}`)
+        .then((res) => {
+            if(res.status === 200){
+                getEscape(id);
+            }
+        })
+        .catch((err) => {
+            console.log("Error in deleting Review: Show JSX");
+            console.log(err);
+        })
+    }
+
     const ReviewForm = () => {
         return (
             <>
@@ -129,6 +143,9 @@ const Show = () => {
                         <p className="card-text">
                             {review.body}
                         </p>
+                        <button onClick={() => onReviewDelete(review._id)} className='btn btn-danger'>
+                            Delete
+                        </button>
                     </div>
                 </div>
             )

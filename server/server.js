@@ -91,6 +91,13 @@ app.post('/escapes/:id/reviews', validateReview, async (req,res) => {
     res.send({escape});
 })
 
+app.delete('/escapes/:id/reviews/:reviewId', async (req,res) => {
+    const {id, reviewId} = req.params;
+    await Escape.findByIdAndUpdate(id, {$pull: { reviews: reviewId}});
+    await Review.findByIdAndDelete(reviewId);
+    res.status(200).send("Review Deleted");
+})
+
 app.get('/', (req,res) => {
     res.send("Hello From Globetrotters!");
 })
