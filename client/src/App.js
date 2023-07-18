@@ -9,6 +9,7 @@ import New from "./views/escapes/New";
 import Error from "./views/Error";
 
 axios.defaults.baseURL = "http://localhost:3001";
+axios.defaults.withCredentials = true;
 
 function App() {
   return (
