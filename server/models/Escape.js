@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Review from "./Review.js";
 const Schema = mongoose.Schema;
 
 const EscapeSchema = new Schema({
@@ -14,5 +15,15 @@ const EscapeSchema = new Schema({
         }
     ],
 });
+
+EscapeSchema.post("findOneAndDelete", async function (escape){
+    if(escape){
+        await Review.deleteMany({
+            _id: {
+                $in: escape.reviews
+            }
+        })
+    }
+})
 
 export default mongoose.model('Escape', EscapeSchema);
