@@ -4,6 +4,7 @@ import { Form, Field } from 'react-final-form'
 import { useNavigate } from 'react-router';
 import * as Validators from "../utils/validators";
 import ValidationDiv from '../components/ValidationDiv';
+import { toast } from 'react-toastify';
 
 const New = () => {
     const navigate = useNavigate();
@@ -13,12 +14,12 @@ const New = () => {
                 .post("/escapes/new", {escape})
                 .then((res) => {
                     if(res.status === 200){
+                        toast.success("Created Escape Successfully!");
                         navigate(`/escapes/${res.data}`);
                     }
                 })
                 .catch((err) => {
-                    console.log("Error in posting new Escape: New JSX");
-                    console.log(err);
+                    toast.error("Error in creating Escape!");
                 });
     };
 

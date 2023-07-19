@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router';
 import { Form, Field } from 'react-final-form'
 import * as Validators from "../utils/validators";
+import { toast } from 'react-toastify';
 
 
 const Show = () => {
@@ -15,12 +16,12 @@ const Show = () => {
             .delete(`/escapes/${id}`)
             .then((res) => {
                 if(res.status === 200){
+                    toast.success("Deleted Escape Successfully!");
                     navigate(`/escapes`);
                 }
             })
             .catch((err) => {
-                console.log("Error Deleting Escape: Show JSX");
-                console.log(err);
+                toast.error("Error in deleting Escape!");
             })
     }
 
@@ -35,8 +36,7 @@ const Show = () => {
                 setEscape(res.data.escape);
             })
             .catch((err) => {
-                console.log("Error in displaying Escape: Show JSX");
-                console.log(err);
+                toast.error("Error in fetching Escape!");
             });
     }
 
@@ -46,12 +46,12 @@ const Show = () => {
             .post(`/escapes/${id}/reviews`, payload)
             .then((res) => {
                 if(res.status === 200){
+                    toast.success("Review Created Successfully!");
                     getEscape(id);
                 }
             })
             .catch((err) => {
-                console.log("Error in posting Review: Show JSX");
-                console.log(err);
+                toast.error("Error in Creating Review!");
             }); 
     }
 
@@ -60,12 +60,12 @@ const Show = () => {
         .delete(`/escapes/${id}/reviews/${reviewId}`)
         .then((res) => {
             if(res.status === 200){
+                toast.success("Review Deleted Successfully!");
                 getEscape(id);
             }
         })
         .catch((err) => {
-            console.log("Error in deleting Review: Show JSX");
-            console.log(err);
+            toast.error("Error in deleting Review!");
         })
     }
 
@@ -132,7 +132,6 @@ const Show = () => {
     }
 
     const ReviewList = () => 
-        // escape.reviews
         escape.reviews?.map((review, index) => {
             return (
                 <div className="mb-3 card" key={index}>
