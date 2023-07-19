@@ -33,7 +33,6 @@ const Show = () => {
         axios
             .get(`/escapes/${id}`)
             .then((res) => {
-                toast.success("Escape Fetched Successfully!");
                 setEscape(res.data.escape);
             })
             .catch((err) => {

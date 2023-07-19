@@ -4,6 +4,7 @@ import { Form, Field } from 'react-final-form'
 import { useNavigate, useParams } from 'react-router';
 import * as Validators from "../utils/validators";
 import ValidationDiv from '../components/ValidationDiv';
+import { toast } from 'react-toastify';
 
 const New = () => {
 
@@ -17,6 +18,9 @@ const New = () => {
             .then((res) => {
                 setEscape(res.data.escape);
             })
+            .catch((err) => {
+                console.log(err);
+            });
     }, [id]);
 
     const onFormSubmit = async (values) => {
@@ -25,12 +29,12 @@ const New = () => {
                 .put(`/escapes/${id}`, {escape})
                 .then((res) => {
                     if(res.status === 200){
+                    toast.success("Edited Escape Successfully!");
                         navigate(`/escapes/${res.data}`)
                     }
                 })
                 .catch((err) => {
-                    console.log("Error in editing Escape: Edit JSX");
-                    console.log(err);
+                    toast.error("Error in editing Escape!");
                     navigate('/error');
                 });
     };
