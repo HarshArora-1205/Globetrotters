@@ -7,7 +7,7 @@ const Escapes = () => {
   
   useEffect(() => {
     axios
-      .get("/escape")
+      .get("/escapes")
       .then((res) => {
         toast.success("Fetched all Escapes");
         setEscapes(res.data.escapes);
