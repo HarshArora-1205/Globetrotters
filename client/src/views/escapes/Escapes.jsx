@@ -1,18 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
+import { toast } from 'react-toastify';
 
 const Escapes = () => {
   const [escapes, setEscapes] = useState([]);
   
   useEffect(() => {
     axios
-      .get("/escapes")
+      .get("/escape")
       .then((res) => {
+        toast.success("Fetched all Escapes");
         setEscapes(res.data.escapes);
       })
       .catch((err) => {
-        console.log("Error in fetching Escapes: Escapes JSX");
-        console.log(err);
+        toast.error("Error in fetching Escapes");
     });
   }, []);
 

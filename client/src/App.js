@@ -26,7 +26,7 @@ function App() {
           <Route path="/error" element={<Error />}/>
         </Route>
       </Routes>
-      <ToastContainer />
+      <ToastContainer position="top-right" />
     </BrowserRouter>
   );
 }
