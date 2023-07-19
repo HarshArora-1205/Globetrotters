@@ -1,4 +1,6 @@
 import {BrowserRouter, Routes, Route} from "react-router-dom";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import Boilerplate from "./views/layouts/Boilerplate";
 import Home from "./views/Home";
@@ -24,6 +26,7 @@ function App() {
           <Route path="/error" element={<Error />}/>
         </Route>
       </Routes>
+      <ToastContainer />
     </BrowserRouter>
   );
 }
