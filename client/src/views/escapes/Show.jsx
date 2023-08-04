@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router';
 import { Form, Field } from 'react-final-form'
 import * as Validators from "../utils/validators";
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 
 const Show = () => {
@@ -34,6 +35,7 @@ const Show = () => {
             .get(`/escapes/${id}`)
             .then((res) => {
                 setEscape(res.data.escape);
+                // toast.success(`Escape fetched!`);
             })
             .catch((err) => {
                 toast.error("Error in fetching Escape!");
@@ -169,7 +171,7 @@ const Show = () => {
                                         <li className="list-group-item">₹{escape.price} per person / day</li>
                                     </ul>
                                     <div className="card-body">
-                                        <a href={`/escapes/${id}/edit`} className="card-link btn btn-info">Edit</a>
+                                        <Link to={`/escapes/${id}/edit`} className="card-link btn btn-info">Edit</Link>
                                         <button onClick={onDelete} className='btn btn-danger ms-2'>Delete</button>
                                     </div>
                                 </div>
@@ -186,7 +188,7 @@ const Show = () => {
                     <h2>No Escape found!</h2>
                 )
             }
-            <a href="/escapes">Back to Escapes!</a>
+            <Link className="card-link btn btn-success" to={'/escapes'}>Back to Escapes</Link>
         </>
     )
 }

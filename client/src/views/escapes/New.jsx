@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router';
 import * as Validators from "../utils/validators";
 import ValidationDiv from '../components/ValidationDiv';
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 const New = () => {
     const navigate = useNavigate();
@@ -123,13 +124,6 @@ const New = () => {
                                 />
                                 <ValidationDiv meta={meta}/>
                             </div>
-                            {/* <input 
-                                {...input}
-                                type="text"
-                                id="price" 
-                                name="escape[price]" 
-                                className={`form-control ${meta.touched ? (meta.error ? "is-invalid" : "is-valid") : ""}`}
-                            /> */}
                         </div>
                     )}
                 </Field>
@@ -171,7 +165,7 @@ const New = () => {
             </h1>
             <div className="col-6 offset-3">
                 <NewForm />
-                <a href="/escapes">Back to Escapes!</a>
+                <Link className="card-link btn btn-success" to={'/escapes'}>Back to Escapes</Link>
             </div>
         </div>
 

@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router';
 import * as Validators from "../utils/validators";
 import ValidationDiv from '../components/ValidationDiv';
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 const New = () => {
 
@@ -183,7 +184,8 @@ const New = () => {
             </h1>
             <div className="col-6 offset-3">
                 <EditForm />
-                <a href="/escapes">Back to Escapes!</a>
+                <Link className="card-link btn btn-info" to={'/escapes'}>Back to Escapes</Link>
+                <Link className="mx-3 card-link btn btn-warning" to={`/escapes/${id}`}>Back to Escape {escape?.title}</Link>
             </div>
         </div>
     </>

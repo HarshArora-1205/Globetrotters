@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 const Escapes = () => {
   const [escapes, setEscapes] = useState([]);
@@ -9,7 +10,7 @@ const Escapes = () => {
     axios
       .get("/escapes")
       .then((res) => {
-        toast.success("Fetched all Escapes");
+        // toast.success("Fetched all Escapes");
         setEscapes(res.data.escapes);
       })
       .catch((err) => {
@@ -41,9 +42,9 @@ const Escapes = () => {
                         {escape.location}
                       </small>
                     </p>
-                    <a href={`/escapes/${escape._id}`} className="btn btn-primary">
+                    <Link to={`/escapes/${escape._id}`} className="btn btn-primary">
                       View {escape.title}
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
