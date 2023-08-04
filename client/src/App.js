@@ -9,6 +9,8 @@ import Show from "./views/escapes/Show";
 import Edit from "./views/escapes/Edit";
 import New from "./views/escapes/New";
 import Error from "./views/Error";
+import Login from "./views/auth/Login";
+import Register from "./views/auth/Register";
 
 axios.defaults.baseURL = "http://localhost:3001";
 axios.defaults.withCredentials = true;
@@ -22,6 +24,8 @@ function App() {
           <Route path="/escapes" element={<Escapes />}/>
           <Route path="/escapes/:id" element={<Show />}/>
           <Route path="/escapes/:id/edit" element={<Edit />}/>
+          <Route path="/auth/login" element={<Login />}/>
+          <Route path="/auth/register" element={<Register />}/>
           <Route path="/escapes/new" element={<New />}/>
           <Route path="/error" element={<Error />}/>
         </Route>
