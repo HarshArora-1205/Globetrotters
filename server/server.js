@@ -5,6 +5,9 @@ import cors from "cors";
 import ExpressError from "./utils/ExpressError.js";
 import escapes from "./routes/escapes.js";
 import reviews from "./routes/reviews.js";
+import passport from "passport";
+import LocalStrategy from "passport-local";
+import User from "./models/User.js";
 
 mongoose.connect('mongodb://0.0.0.0:27017/globetrotters');
 const db = mongoose.connection;
@@ -42,6 +45,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/escapes", escapes);
 app.use("/escapes/:id/reviews", reviews);
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.get('/', (req,res) => {
     res.send("Hello From Globetrotters!");
