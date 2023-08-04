@@ -3,8 +3,9 @@ import mongoose from "mongoose";
 import session from "express-session";
 import cors from "cors";
 import ExpressError from "./utils/ExpressError.js";
-import escapes from "./routes/escapes.js";
-import reviews from "./routes/reviews.js";
+import escapeRoutes from "./routes/escapes.js";
+import reviewRoutes from "./routes/reviews.js";
+import userRoutes from "./routes/users.js";
 import passport from "passport";
 import LocalStrategy from "passport-local";
 import User from "./models/User.js";
@@ -42,8 +43,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-app.use("/escapes", escapes);
-app.use("/escapes/:id/reviews", reviews);
+app.use("/escapes", escapeRoutes);
+app.use("/escapes/:id/reviews", reviewRoutes);
+app.use("/auth", userRoutes);
 
 app.use(passport.initialize());
 app.use(passport.session());

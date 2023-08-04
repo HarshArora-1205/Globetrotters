@@ -13,10 +13,14 @@ const Login = () => {
 
     const onFormSubmit = async (values) => {
         await axios
-            .post("/login", {...values}) 
+            .post("/auth/login", {...values}) 
             .then((res) => {
+                console.log(res);
+                const { message, isAuthenticated } = res.data;
+
+                window.localStorage.setItem("isAuthenticated", isAuthenticated);
                 if(res.status === 200){
-                    toast.success(res.data.message);
+                    toast.success(message);
                     navigate(`/escapes/`);
                 }
             })

@@ -13,8 +13,10 @@ const Register = () => {
 
     const onFormSubmit = async (values) => {
         await axios
-            .post("/register", {...values})
+            .post("/auth/register", {...values})
             .then((res) => {
+                const isAuthenticated = res.data.isAuthenticated;
+                window.localStorage.setItem("isAuthenticated", isAuthenticated);
                 if(res.status === 200){
                     toast.success(res.data.message);
                     navigate(`/escapes/`);
