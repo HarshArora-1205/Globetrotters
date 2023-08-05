@@ -21,6 +21,18 @@ const Navbar = () => {
                         <Link className="nav-link" to={`/escapes/new`}>New Escape</Link>
                     </li>
                 </ul>
+
+                <ul className="navbar-nav ms-auto">
+                    <li className="nav-item">
+                        <Link className="nav-link" to={`/auth/login`}>Login</Link>
+                    </li>
+                    <li className="nav-item">
+                        <Link className="nav-link" to={`/auth/register`}>Register</Link>
+                    </li>
+                    <li className="nav-item">
+                        <Link className="nav-link" to={`/auth/register`}>Logout</Link>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
