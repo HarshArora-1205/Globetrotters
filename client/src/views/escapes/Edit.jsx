@@ -6,9 +6,10 @@ import * as Validators from "../utils/validators";
 import ValidationDiv from '../components/ValidationDiv';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
+import useAuth from '../../hooks/useAuth';
 
 const New = () => {
-
+    const { isAuthenticated } = useAuth();
     const navigate = useNavigate();
     const { id } = useParams();
     const [escape, setEscape] = useState(undefined);
@@ -27,7 +28,7 @@ const New = () => {
     const onFormSubmit = async (values) => {
         const escape = {...values};
         await axios
-                .put(`/escapes/${id}`, {escape})
+                .put(`/escapes/${id}`, {escape, isAuthenticated})
                 .then((res) => {
                     if(res.status === 200){
                     toast.success("Edited Escape Successfully!");
@@ -35,7 +36,7 @@ const New = () => {
                     }
                 })
                 .catch((err) => {
-                    toast.error("Error in editing Escape!");
+                    toast.error(err.response.data.error || "Error in Editing Escape");
                     navigate('/error');
                 });
     };

@@ -1,8 +1,6 @@
 import express from "express";
 import User from "../models/User.js";
 import passport from "passport";
-import catchAsync from "../utils/catchAsync.js";
-// import ExpressError from "../utils/ExpressError.js";
 
 const router = express.Router();
 
@@ -48,7 +46,7 @@ router.get('/logout', (req, res) => {
     req.session.destroy((err) => {
         if (err) {
           console.error('Error during logout:', err);
-          return res.status(500).send('Failed to logout!');
+          return res.status(500).json({ success: false, message: 'Failed to logout!' });
         }
         res.clearCookie('connect.sid');
         res.status(200).json({ success: true, message: 'Logged out successfully!' });

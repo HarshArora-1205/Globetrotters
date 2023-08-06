@@ -17,7 +17,7 @@ const Register = () => {
             .then((res) => {
                 if(res.status === 200){
                     toast.success(res.data.message);
-                    navigate(`/escapes/`);
+                    navigate(`/auth/login`);
                 }
             })
             .catch((err) => {

@@ -16,7 +16,6 @@ const useAuth = () => {
     await axios
         .get('/auth/logout')
         .then((res) => {
-          console.log(res);
           const { message } = res.data;
 
           if(res.status === 200){

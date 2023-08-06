@@ -34,7 +34,7 @@ router.get('/:id', catchAsync(async (req,res) => {
     res.send({escape});
 }))
 
-router.put('/:id', validateEscape, catchAsync(async (req, res) => {
+router.put('/:id', isLoggedIn, validateEscape, catchAsync(async (req, res) => {
     const escape = await Escape.findByIdAndUpdate(req.params.id, {...req.body.escape});
     res.send(escape._id);
 }))

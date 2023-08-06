@@ -22,8 +22,7 @@ const Login = () => {
                 if(res.status === 200 && isAuthenticated && user){
                     login(user);
                     toast.success(`Welcome Back! ${user.username}`);
-                    // toast.success(message);
-                    navigate(`/escapes/`);
+                    navigate(-1);
                 }
             })
             .catch((err) => {

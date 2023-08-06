@@ -30,7 +30,7 @@ const New = () => {
                     }
                 })
                 .catch((err) => {
-                    toast.error("Error in creating Escape!");
+                    toast.error(err.response.data.error || "Error in creating Escape!");
                 });
     };
 
@@ -104,8 +104,8 @@ const New = () => {
 
                 <Field name="price" validate={Validators.chainValidators(
                     Validators.required,
-                    // Validators.isNum,
-                    // Validators.isGreater(10)
+                    Validators.isNum,
+                    Validators.isGreater(10)
                 )}>
                     {({ input, meta }) => (
                         <div className='mb-3'>
@@ -169,7 +169,6 @@ const New = () => {
       
     return (
         <>
-            {/* {isAuthenticated ? ( */}
             <div className="row">
                 <h1 className="text-center">Add New Escape!</h1>
                 <div className="col-6 offset-3">
@@ -179,9 +178,6 @@ const New = () => {
                 </Link>
                 </div>
             </div>
-            {/* ) : ( */}
-            {/* <Navigate to="/auth/login" /> */}
-            {/* )} */}
         </>
     );
 }
