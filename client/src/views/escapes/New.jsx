@@ -1,14 +1,24 @@
 import axios from 'axios';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Form, Field } from 'react-final-form'
 import { useNavigate } from 'react-router';
 import * as Validators from "../utils/validators";
 import ValidationDiv from '../components/ValidationDiv';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
+import useAuth from '../../hooks/useAuth';
 
 const New = () => {
+    const { isAuthenticated } = useAuth();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!isAuthenticated) {
+          toast.error('You must be signed in!');
+          navigate(`/auth/login`);
+        }
+    }, [isAuthenticated, navigate]);
+
     const onFormSubmit = async (values) => {
         const escape = {...values};
         await axios
@@ -157,20 +167,23 @@ const New = () => {
         />
     );
       
-  return (
-    <>
-        <div className="row">
-            <h1 className="text-center">
-                Add New Escape!
-            </h1>
-            <div className="col-6 offset-3">
+    return (
+        <>
+            {/* {isAuthenticated ? ( */}
+            <div className="row">
+                <h1 className="text-center">Add New Escape!</h1>
+                <div className="col-6 offset-3">
                 <NewForm />
-                <Link className="card-link btn btn-success" to={'/escapes'}>Back to Escapes</Link>
+                <Link className="card-link btn btn-success" to={'/escapes'}>
+                    Back to Escapes
+                </Link>
+                </div>
             </div>
-        </div>
-
-    </>
-  )
+            {/* ) : ( */}
+            {/* <Navigate to="/auth/login" /> */}
+            {/* )} */}
+        </>
+    );
 }
 
 export default New
