@@ -37,9 +37,22 @@ router.post('/login', (req, res, next) => {
                 return res.status(500).json({ error: 'Internal server error' });
             }
         });
+
+        
         return res.status(200).json({ message: 'Login successful', isAuthenticated: true, user});
 
     })(req, res, next);
+});
+
+router.get('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+          console.error('Error during logout:', err);
+          return res.status(500).send('Failed to logout!');
+        }
+        res.clearCookie('connect.sid');
+        res.status(200).json({ success: true, message: 'Logged out successfully!' });
+    });
 });
 
 export default router;

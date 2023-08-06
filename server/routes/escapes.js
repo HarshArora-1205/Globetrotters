@@ -3,6 +3,7 @@ import Escape from "../models/Escape.js";
 import catchAsync from "../utils/catchAsync.js";
 import { escapeSchema } from "../joiSchemas.js";
 import ExpressError from "../utils/ExpressError.js";
+import isLoggedIn from "../middlewares/middleware.js";
 
 const router = express.Router();
 
@@ -22,7 +23,7 @@ router.get('/', catchAsync(async(req,res) => {
     res.send({escapes});
 }))
 
-router.post('/new', validateEscape, catchAsync(async (req, res) => {
+router.post('/new',  isLoggedIn, validateEscape, catchAsync(async (req, res) => {
     const escape = new Escape(req.body.escape);
     await escape.save();
     res.send(escape._id);

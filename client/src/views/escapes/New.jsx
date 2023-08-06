@@ -22,7 +22,7 @@ const New = () => {
     const onFormSubmit = async (values) => {
         const escape = {...values};
         await axios
-                .post("/escapes/new", {escape})
+                .post("/escapes/new", {escape, isAuthenticated})
                 .then((res) => {
                     if(res.status === 200){
                         toast.success("Created Escape Successfully!");

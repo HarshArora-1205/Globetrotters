@@ -1,7 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import useAuth from '../../hooks/useAuth';
 
 const Navbar = () => {
+
+    const { logout } = useAuth();
+
+
   return (
     <nav className="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
         <div className="container">
@@ -30,7 +35,7 @@ const Navbar = () => {
                         <Link className="nav-link" to={`/auth/register`}>Register</Link>
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link" to={`/auth/register`}>Logout</Link>
+                        <button className="nav-link" onClick={logout}>Logout</button>
                     </li>
                 </ul>
             </div>
