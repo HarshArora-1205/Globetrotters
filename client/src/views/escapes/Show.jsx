@@ -5,12 +5,15 @@ import { Form, Field } from 'react-final-form'
 import * as Validators from "../utils/validators";
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
+import useAuth from '../../hooks/useAuth';
 
 
 const Show = () => {
     const navigate = useNavigate();
     const [escape, setEscape] = useState({});
     const { id } = useParams();
+    const { user } = useAuth();
+    
 
     const onDelete = () => {
         axios
@@ -28,6 +31,8 @@ const Show = () => {
 
     useEffect(() => {
         getEscape(id);
+        // console.log("Logged User : ", user);
+        // console.log("Escape Author : ", escape.author);
     }, [id]);
 
     function getEscape(id) {
@@ -171,10 +176,14 @@ const Show = () => {
                                         <li className="list-group-item">Submitted by {escape.author?.username}</li>
                                         <li className="list-group-item">₹{escape.price} per person / day</li>
                                     </ul>
-                                    <div className="card-body">
-                                        <Link to={`/escapes/${id}/edit`} className="card-link btn btn-info">Edit</Link>
-                                        <button onClick={onDelete} className='btn btn-danger ms-2'>Delete</button>
-                                    </div>
+                                    {
+                                        user && escape.author?._id === user._id && (
+                                            <div className="card-body">
+                                                <Link to={`/escapes/${id}/edit`} className="card-link btn btn-info">Edit</Link>
+                                                <button onClick={onDelete} className='btn btn-danger ms-2'>Delete</button>
+                                            </div>
+                                        )
+                                    }
                                 </div>
                             </div>
                             <div className="col-6">
