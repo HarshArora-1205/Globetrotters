@@ -2,13 +2,14 @@ import express from "express";
 import Review from "../models/Review.js";
 import catchAsync from "../utils/catchAsync.js";
 import Escape from "../models/Escape.js";
-import { validateReview } from "../middlewares/middleware.js";
+import { validateReview, isLoggedIn } from "../middlewares/middleware.js";
 
 const router = express.Router({ mergeParams: true });
 
-router.post('/', validateReview, catchAsync(async (req,res) => {
+router.post('/', validateReview, isLoggedIn, catchAsync(async (req,res) => {
     const escape = await Escape.findById(req.params.id);
     const review = new Review(req.body.review);
+    review.author = req.body.user._id;
     escape.reviews.push(review);
     await review.save();
     await escape.save();
@@ -17,9 +18,21 @@ router.post('/', validateReview, catchAsync(async (req,res) => {
 
 router.delete('/:reviewId', catchAsync(async (req,res) => {
     const {id, reviewId} = req.params;
-    await Escape.findByIdAndUpdate(id, {$pull: { reviews: reviewId}});
-    await Review.findByIdAndDelete(reviewId);
-    res.status(200).send("Review Deleted");
+    const review = await Review.findById(reviewId);
+    if(!req.query.isAuthenticated){
+        res.status(400).json({ error: "You are not authorized!" });
+    }
+    else{
+        if(!review.author.equals(req.query.user._id)){
+            res.status(400).json({ error: "You are not authorized!" });
+        }
+        else{
+            await Escape.findByIdAndUpdate(id, {$pull: { reviews: reviewId}});
+            await Review.findByIdAndDelete(reviewId);
+            res.status(200).send("Review Deleted");
+        }
+    }
+    
 }))
 
 export default router;

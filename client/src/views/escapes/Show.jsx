@@ -51,7 +51,7 @@ const Show = () => {
     }
 
     const onReviewSubmit = (values) => {
-        const payload = {review: {...values}};
+        const payload = {review: {...values}, isAuthenticated, user};
         axios
             .post(`/escapes/${id}/reviews`, payload)
             .then((res) => {
@@ -67,7 +67,12 @@ const Show = () => {
 
     const onReviewDelete = (reviewId) => {
         axios
-        .delete(`/escapes/${id}/reviews/${reviewId}`)
+        .delete(`/escapes/${id}/reviews/${reviewId}`, { 
+            params: { 
+                user, 
+                isAuthenticated 
+            }
+        })
         .then((res) => {
             if(res.status === 200){
                 toast.success("Review Deleted Successfully!");
@@ -75,7 +80,12 @@ const Show = () => {
             }
         })
         .catch((err) => {
-            toast.error("Error in deleting Review!");
+            if (err.response && err.response.data && err.response.data.error) {
+                toast.error(err.response.data.error);
+            } 
+            else {
+                toast.error("Error in Editing Review");
+            }
         })
     }
 
@@ -149,12 +159,19 @@ const Show = () => {
                         <h5 className="card-title">
                             Rating: {review.rating}
                         </h5>
+                        <h6 className="card-subtitle mb-2 text-muted">
+                            By {review.author?.username}
+                        </h6>
                         <p className="card-text">
                             {review.body}
                         </p>
-                        <button onClick={() => onReviewDelete(review._id)} className='btn btn-danger'>
-                            Delete
-                        </button>
+                        {
+                            user && review.author?._id === user._id && (
+                                <button onClick={() => onReviewDelete(review._id)} className='btn btn-danger'>
+                                    Delete
+                                </button>
+                            )
+                        }
                     </div>
                 </div>
             )

@@ -20,7 +20,12 @@ router.post('/new',  isLoggedIn, validateEscape, catchAsync(async (req, res) => 
 }));
 
 router.get('/:id', catchAsync(async (req,res) => {
-    const escape = await Escape.findById(req.params.id).populate("reviews").populate("author");
+    const escape = await Escape.findById(req.params.id).populate({
+        path: 'reviews',
+        populate: {
+            path: 'author',
+        }
+    }).populate("author");
     res.send({escape});
 }));
 
