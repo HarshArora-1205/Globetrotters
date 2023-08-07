@@ -12,12 +12,17 @@ const Show = () => {
     const navigate = useNavigate();
     const [escape, setEscape] = useState({});
     const { id } = useParams();
-    const { user } = useAuth();
+    const { user, isAuthenticated } = useAuth();
     
 
     const onDelete = () => {
         axios
-            .delete(`/escapes/${id}`)
+            .delete(`/escapes/${id}`, { 
+                params: { 
+                    user, 
+                    isAuthenticated 
+                }
+            })
             .then((res) => {
                 if(res.status === 200){
                     toast.success("Deleted Escape Successfully!");
@@ -31,8 +36,6 @@ const Show = () => {
 
     useEffect(() => {
         getEscape(id);
-        // console.log("Logged User : ", user);
-        // console.log("Escape Author : ", escape.author);
     }, [id]);
 
     function getEscape(id) {

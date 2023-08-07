@@ -1,22 +1,10 @@
 import express from "express";
 import Review from "../models/Review.js";
 import catchAsync from "../utils/catchAsync.js";
-import { reviewSchema } from "../joiSchemas.js";
-import ExpressError from "../utils/ExpressError.js";
 import Escape from "../models/Escape.js";
+import { validateReview } from "../middlewares/middleware.js";
 
 const router = express.Router({ mergeParams: true });
-
-const validateReview = (req, res, next) => {
-    const {error} = reviewSchema.validate(req.body);
-    if(error){
-        const msg = error.details.map((el) => el.message).join(',');
-        throw new ExpressError(msg, 400);
-    }
-    else{
-        next();
-    }
-}
 
 router.post('/', validateReview, catchAsync(async (req,res) => {
     const escape = await Escape.findById(req.params.id);
