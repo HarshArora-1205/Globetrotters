@@ -168,6 +168,7 @@ const Show = () => {
                                     </div>
                                     <ul className="list-group list-group-flush">
                                         <li className="list-group-item text-muted">{escape.location}</li>
+                                        <li className="list-group-item">Submitted by {escape.author?.username}</li>
                                         <li className="list-group-item">₹{escape.price} per person / day</li>
                                     </ul>
                                     <div className="card-body">
