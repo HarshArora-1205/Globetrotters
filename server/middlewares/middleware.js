@@ -1,5 +1,5 @@
 const isLoggedIn = (req, res, next) => {
-    if(!req.isAuthenticated){
+    if(!req.body.isAuthenticated){
         return res.status(401).json({ error: 'Unauthorized Access' });
     }
     next();
