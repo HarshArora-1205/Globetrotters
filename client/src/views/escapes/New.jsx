@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 
 const New = () => {
-    const { isAuthenticated } = useAuth();
+    const { user, isAuthenticated } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -22,7 +22,7 @@ const New = () => {
     const onFormSubmit = async (values) => {
         const escape = {...values};
         await axios
-                .post("/escapes/new", {escape, isAuthenticated})
+                .post("/escapes/new", {escape, isAuthenticated, user})
                 .then((res) => {
                     if(res.status === 200){
                         toast.success("Created Escape Successfully!");

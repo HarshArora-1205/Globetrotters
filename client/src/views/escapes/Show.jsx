@@ -5,16 +5,24 @@ import { Form, Field } from 'react-final-form'
 import * as Validators from "../utils/validators";
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
+import useAuth from '../../hooks/useAuth';
 
 
 const Show = () => {
     const navigate = useNavigate();
     const [escape, setEscape] = useState({});
     const { id } = useParams();
+    const { user, isAuthenticated } = useAuth();
+    
 
     const onDelete = () => {
         axios
-            .delete(`/escapes/${id}`)
+            .delete(`/escapes/${id}`, { 
+                params: { 
+                    user, 
+                    isAuthenticated 
+                }
+            })
             .then((res) => {
                 if(res.status === 200){
                     toast.success("Deleted Escape Successfully!");
@@ -43,7 +51,7 @@ const Show = () => {
     }
 
     const onReviewSubmit = (values) => {
-        const payload = {review: {...values}};
+        const payload = {review: {...values}, isAuthenticated, user};
         axios
             .post(`/escapes/${id}/reviews`, payload)
             .then((res) => {
@@ -59,7 +67,12 @@ const Show = () => {
 
     const onReviewDelete = (reviewId) => {
         axios
-        .delete(`/escapes/${id}/reviews/${reviewId}`)
+        .delete(`/escapes/${id}/reviews/${reviewId}`, { 
+            params: { 
+                user, 
+                isAuthenticated 
+            }
+        })
         .then((res) => {
             if(res.status === 200){
                 toast.success("Review Deleted Successfully!");
@@ -67,7 +80,12 @@ const Show = () => {
             }
         })
         .catch((err) => {
-            toast.error("Error in deleting Review!");
+            if (err.response && err.response.data && err.response.data.error) {
+                toast.error(err.response.data.error);
+            } 
+            else {
+                toast.error("Error in Editing Review");
+            }
         })
     }
 
@@ -141,12 +159,19 @@ const Show = () => {
                         <h5 className="card-title">
                             Rating: {review.rating}
                         </h5>
+                        <h6 className="card-subtitle mb-2 text-muted">
+                            By {review.author?.username}
+                        </h6>
                         <p className="card-text">
                             {review.body}
                         </p>
-                        <button onClick={() => onReviewDelete(review._id)} className='btn btn-danger'>
-                            Delete
-                        </button>
+                        {
+                            user && review.author?._id === user._id && (
+                                <button onClick={() => onReviewDelete(review._id)} className='btn btn-danger'>
+                                    Delete
+                                </button>
+                            )
+                        }
                     </div>
                 </div>
             )
@@ -168,16 +193,21 @@ const Show = () => {
                                     </div>
                                     <ul className="list-group list-group-flush">
                                         <li className="list-group-item text-muted">{escape.location}</li>
+                                        <li className="list-group-item">Submitted by {escape.author?.username}</li>
                                         <li className="list-group-item">₹{escape.price} per person / day</li>
                                     </ul>
-                                    <div className="card-body">
-                                        <Link to={`/escapes/${id}/edit`} className="card-link btn btn-info">Edit</Link>
-                                        <button onClick={onDelete} className='btn btn-danger ms-2'>Delete</button>
-                                    </div>
+                                    {
+                                        user && escape.author?._id === user._id && (
+                                            <div className="card-body">
+                                                <Link to={`/escapes/${id}/edit`} className="card-link btn btn-info">Edit</Link>
+                                                <button onClick={onDelete} className='btn btn-danger ms-2'>Delete</button>
+                                            </div>
+                                        )
+                                    }
                                 </div>
                             </div>
                             <div className="col-6">
-                                <ReviewForm />
+                                {isAuthenticated ? (<ReviewForm />) : (null)}
                                 <ReviewList />
                             </div>
                         </div>

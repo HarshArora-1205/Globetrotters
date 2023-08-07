@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 
 const New = () => {
-    const { isAuthenticated } = useAuth();
+    const { user, isAuthenticated } = useAuth();
     const navigate = useNavigate();
     const { id } = useParams();
     const [escape, setEscape] = useState(undefined);
@@ -28,7 +28,7 @@ const New = () => {
     const onFormSubmit = async (values) => {
         const escape = {...values};
         await axios
-                .put(`/escapes/${id}`, {escape, isAuthenticated})
+                .put(`/escapes/${id}`, {escape, isAuthenticated, user})
                 .then((res) => {
                     if(res.status === 200){
                     toast.success("Edited Escape Successfully!");
@@ -179,16 +179,22 @@ const New = () => {
 
   return (
     <>
-        <div className="row">
-            <h1 className="text-center">
-                Edit Escape!
-            </h1>
-            <div className="col-6 offset-3">
-                <EditForm />
-                <Link className="card-link btn btn-info" to={'/escapes'}>Back to Escapes</Link>
-                <Link className="mx-3 card-link btn btn-warning" to={`/escapes/${id}`}>Back to Escape {escape?.title}</Link>
-            </div>
-        </div>
+        {
+             isAuthenticated ? ( 
+                <div className="row">
+                    <h1 className="text-center">
+                        Edit Escape!
+                    </h1>
+                    <div className="col-6 offset-3">
+                        <EditForm />
+                        <Link className="card-link btn btn-info" to={'/escapes'}>Back to Escapes</Link>
+                        <Link className="mx-3 card-link btn btn-warning" to={`/escapes/${id}`}>Back to Escape {escape?.title}</Link>
+                    </div>
+                </div>
+            ) : ( 
+                navigate(-1)
+            ) 
+        } 
     </>
   )
 }

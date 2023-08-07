@@ -16,6 +16,7 @@ const seedDB = async() => {
     for(let i = 0; i < 60; i++){
         const price = Math.floor((Math.random() * 100)) + 10;
         const escape = new Escape({
+            author: '64d0768a4540d23eec149f22',
             location: `${escapes[i].city}, ${escapes[i].state}`,
             title: `${escapes[i].title}`,
             description: `${escapes[i].description}`,
