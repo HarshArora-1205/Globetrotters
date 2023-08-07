@@ -8,7 +8,7 @@ import isLoggedIn from "../middlewares/middleware.js";
 const router = express.Router();
 
 const validateEscape = (req, res, next) => {
-    const {error} = escapeSchema.validate(req.body)
+    const {error} = escapeSchema.validate(req.escape);
     if(error){
         const msg = error.details.map((el) => el.message).join(',');
         throw new ExpressError(msg, 400);
