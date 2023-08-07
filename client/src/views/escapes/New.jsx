@@ -1,17 +1,28 @@
 import axios from 'axios';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Form, Field } from 'react-final-form'
 import { useNavigate } from 'react-router';
 import * as Validators from "../utils/validators";
 import ValidationDiv from '../components/ValidationDiv';
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
+import useAuth from '../../hooks/useAuth';
 
 const New = () => {
+    const { isAuthenticated } = useAuth();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!isAuthenticated) {
+          toast.error('You must be signed in!');
+          navigate(`/auth/login`);
+        }
+    }, [isAuthenticated, navigate]);
+
     const onFormSubmit = async (values) => {
         const escape = {...values};
         await axios
-                .post("/escapes/new", {escape})
+                .post("/escapes/new", {escape, isAuthenticated})
                 .then((res) => {
                     if(res.status === 200){
                         toast.success("Created Escape Successfully!");
@@ -19,7 +30,7 @@ const New = () => {
                     }
                 })
                 .catch((err) => {
-                    toast.error("Error in creating Escape!");
+                    toast.error(err.response.data.error || "Error in creating Escape!");
                 });
     };
 
@@ -93,8 +104,8 @@ const New = () => {
 
                 <Field name="price" validate={Validators.chainValidators(
                     Validators.required,
-                    // Validators.isNum,
-                    // Validators.isGreater(10)
+                    Validators.isNum,
+                    Validators.isGreater(10)
                 )}>
                     {({ input, meta }) => (
                         <div className='mb-3'>
@@ -123,13 +134,6 @@ const New = () => {
                                 />
                                 <ValidationDiv meta={meta}/>
                             </div>
-                            {/* <input 
-                                {...input}
-                                type="text"
-                                id="price" 
-                                name="escape[price]" 
-                                className={`form-control ${meta.touched ? (meta.error ? "is-invalid" : "is-valid") : ""}`}
-                            /> */}
                         </div>
                     )}
                 </Field>
@@ -163,20 +167,19 @@ const New = () => {
         />
     );
       
-  return (
-    <>
-        <div className="row">
-            <h1 className="text-center">
-                Add New Escape!
-            </h1>
-            <div className="col-6 offset-3">
+    return (
+        <>
+            <div className="row">
+                <h1 className="text-center">Add New Escape!</h1>
+                <div className="col-6 offset-3">
                 <NewForm />
-                <a href="/escapes">Back to Escapes!</a>
+                <Link className="card-link btn btn-success" to={'/escapes'}>
+                    Back to Escapes
+                </Link>
+                </div>
             </div>
-        </div>
-
-    </>
-  )
+        </>
+    );
 }
 
 export default New

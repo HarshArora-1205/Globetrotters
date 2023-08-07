@@ -3,8 +3,12 @@ import mongoose from "mongoose";
 import session from "express-session";
 import cors from "cors";
 import ExpressError from "./utils/ExpressError.js";
-import escapes from "./routes/escapes.js";
-import reviews from "./routes/reviews.js";
+import escapeRoutes from "./routes/escapes.js";
+import reviewRoutes from "./routes/reviews.js";
+import userRoutes from "./routes/users.js";
+import passport from "passport";
+import LocalStrategy from "passport-local";
+import User from "./models/User.js";
 
 mongoose.connect('mongodb://0.0.0.0:27017/globetrotters');
 const db = mongoose.connection;
@@ -27,6 +31,8 @@ const sessionConfig = {
     saveUninitialized: true,
     cookie: {
         httpOnly: true,
+        secure: true,
+        sameSite: 'none',
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
         maxAge: 1000 * 60 * 60 * 24 * 7,
     }
@@ -39,9 +45,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-app.use("/escapes", escapes);
-app.use("/escapes/:id/reviews", reviews);
+app.use("/escapes", escapeRoutes);
+app.use("/escapes/:id/reviews", reviewRoutes);
+app.use("/auth", userRoutes);
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.get('/', (req,res) => {
     res.send("Hello From Globetrotters!");
