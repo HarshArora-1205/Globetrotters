@@ -192,7 +192,7 @@ const New = () => {
                     </div>
                 </div>
             ) : ( 
-                 navigate(-1) 
+                navigate(-1)
             ) 
         } 
     </>
