@@ -179,8 +179,8 @@ const New = () => {
 
   return (
     <>
-        {/* { */}
-            {/* isAuthenticated ? ( */}
+        {
+             isAuthenticated ? ( 
                 <div className="row">
                     <h1 className="text-center">
                         Edit Escape!
@@ -191,10 +191,10 @@ const New = () => {
                         <Link className="mx-3 card-link btn btn-warning" to={`/escapes/${id}`}>Back to Escape {escape?.title}</Link>
                     </div>
                 </div>
-            {/* ) : ( */}
-                {/* navigate(-1) */}
-            {/* ) */}
-        {/* } */}
+            ) : ( 
+                 navigate(-1) 
+            ) 
+        } 
     </>
   )
 }
