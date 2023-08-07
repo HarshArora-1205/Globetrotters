@@ -190,7 +190,7 @@ const Show = () => {
                                 </div>
                             </div>
                             <div className="col-6">
-                                <ReviewForm />
+                                {isAuthenticated ? (<ReviewForm />) : (null)}
                                 <ReviewList />
                             </div>
                         </div>
