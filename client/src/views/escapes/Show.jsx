@@ -157,7 +157,7 @@ const Show = () => {
                 <div className="mb-3 card" key={index}>
                     <div className="card-body">
                         <h5 className="card-title">
-                            <strong>{review.author?.username.charAt(0).toUpperCase() + review.author?.username.slice(1)}</strong>
+                        <strong>{review.author?.username.charAt(0).toUpperCase() + review.author?.username.slice(1)}</strong>
                         </h5>
                         <p className="starability-result" data-rating={review.rating}>
                             Rated: {review.rating} stars
