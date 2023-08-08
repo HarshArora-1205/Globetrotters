@@ -8,12 +8,11 @@ const router = express.Router();
 
 router.get('/', catchAsync(escapes.allEscapes));
 
-router.post('/new',  isLoggedIn, validateEscape, catchAsync(escapes.newEscape));
+router.post('/new', isLoggedIn, validateEscape, catchAsync(escapes.newEscape));
 
-router.get('/:id', catchAsync(escapes.sendEscape));
-
-router.put('/:id', isLoggedIn, isAuthor, validateEscape, catchAsync(escapes.editEscape));
-
-router.delete('/:id', catchAsync(escapes.deleteEscape));
+router.route('/:id')
+    .get(catchAsync(escapes.sendEscape))
+    .put(isLoggedIn, isAuthor, validateEscape, catchAsync(escapes.editEscape))
+    .delete(catchAsync(escapes.deleteEscape));
 
 export default router;
