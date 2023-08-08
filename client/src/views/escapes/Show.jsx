@@ -6,7 +6,7 @@ import * as Validators from "../utils/validators";
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
-
+import '../../stylesheets/starability-slot.css';
 
 const Show = () => {
     const navigate = useNavigate();
@@ -157,11 +157,11 @@ const Show = () => {
                 <div className="mb-3 card" key={index}>
                     <div className="card-body">
                         <h5 className="card-title">
-                            Rating: {review.rating}
+                            <strong>{review.author?.username.charAt(0).toUpperCase() + review.author?.username.slice(1)}</strong>
                         </h5>
-                        <h6 className="card-subtitle mb-2 text-muted">
-                            By {review.author?.username}
-                        </h6>
+                        <p className="starability-result" data-rating={review.rating}>
+                            Rated: {review.rating} stars
+                        </p>
                         <p className="card-text">
                             {review.body}
                         </p>
