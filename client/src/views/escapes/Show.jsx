@@ -92,7 +92,7 @@ const Show = () => {
     const ReviewForm = () => {
         return (
             <>
-                <h2>Leave a Review</h2>
+                <h2 className='mt-3'>Leave a Review</h2>
                 <Form
                   onSubmit={onReviewSubmit}
                   render={({ handleSubmit, invalid }) => (
@@ -177,48 +177,47 @@ const Show = () => {
             )
         });
     
+        if(!escape){
+            return <h2>No Escape Found!</h2>
+        }
 
     return (
         <>
-            {
-                escape ? (
-                    <>
-                        <div className="row">
-                            <div className="col-6">
-                                <div className="card mb-3">
-                                    <img src={escape.image} className="card-img-top" alt={escape.title}/>
-                                    <div className="card-body">
-                                        <h5 className="card-title">{escape.title}</h5>
-                                        <p className="card-text">{escape.description}</p>
-                                    </div>
-                                    <ul className="list-group list-group-flush">
-                                        <li className="list-group-item text-muted">{escape.location}</li>
-                                        <li className="list-group-item">Submitted by {escape.author?.username}</li>
-                                        <li className="list-group-item">₹{escape.price} per person / day</li>
-                                    </ul>
-                                    {
-                                        user && escape.author?._id === user._id && (
-                                            <div className="card-body">
-                                                <Link to={`/escapes/${id}/edit`} className="card-link btn btn-info">Edit</Link>
-                                                <button onClick={onDelete} className='btn btn-danger ms-2'>Delete</button>
-                                            </div>
-                                        )
-                                    }
-                                </div>
-                            </div>
-                            <div className="col-6">
-                                {isAuthenticated ? (<ReviewForm />) : (null)}
-                                <ReviewList />
-                            </div>
+            <div className="row justify-content-center">
+                <div className="col-12 col-lg-6 ">
+                    <div className="card mb-3">
+                        <img src={escape.image} className="card-img-top" alt={escape.title}/>
+                        <div className="card-body">
+                            <h5 className="card-title">{escape.title}</h5>
+                            <p className="card-text">{escape.description}</p>
                         </div>
-
-
-                    </>
-                ) : (
-                    <h2>No Escape found!</h2>
-                )
-            }
-            <Link className="card-link btn btn-success" to={'/escapes'}>Back to Escapes</Link>
+                        <ul className="list-group list-group-flush">
+                            <li className="list-group-item text-muted">{escape.location}</li>
+                            <li className="list-group-item">Submitted by {escape.author?.username}</li>
+                            <li className="list-group-item">₹{escape.price} per person / day</li>
+                        </ul>
+                        {
+                            user && escape.author?._id === user._id && (
+                                <div className="card-body">
+                                    <Link to={`/escapes/${id}/edit`} className="card-link btn btn-info">Edit</Link>
+                                    <button onClick={onDelete} className='btn btn-danger ms-2'>Delete</button>
+                                </div>
+                            )
+                        }
+                    </div>
+                    <Link className="card-link btn btn-success" to={'/escapes'}>Back to Escapes</Link>
+                </div>
+                
+                {
+                    escape.reviews && isAuthenticated && (
+                        <div className="col-12 col-lg-6">
+                            {isAuthenticated ? (<ReviewForm />) : (null)}
+                            <ReviewList />
+                        </div>
+                    )
+                }
+            </div>
+            
         </>
     )
 }
