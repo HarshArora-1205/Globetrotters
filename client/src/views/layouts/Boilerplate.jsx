@@ -5,7 +5,7 @@ import Footer from "../partials/Footer";
 
 const Boilerplate = () => {
     return (
-        <div className="d-flex flex-column vh-100">
+        <div className="d-flex flex-column  justify-content-between vh-100">
             <Navbar />
             <main className="container mt-5">
                 <Outlet />

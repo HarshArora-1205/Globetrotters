@@ -9,8 +9,11 @@ import userRoutes from "./routes/users.js";
 import passport from "passport";
 import LocalStrategy from "passport-local";
 import User from "./models/User.js";
+import dotenv from "dotenv";
 
-mongoose.connect('mongodb://0.0.0.0:27017/globetrotters');
+dotenv.config();
+
+mongoose.connect(process.env.MONGO_URL);
 const db = mongoose.connection;
 
 db.on("error", console.error.bind(console, "Connection error:"));
