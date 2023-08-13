@@ -154,7 +154,7 @@ const Show = () => {
     const ReviewList = () => 
         escape.reviews?.map((review, index) => {
             return (
-                <div className="mb-3 card" key={index}>
+                <div className="my-3 card" key={index}>
                     <div className="card-body">
                         <h5 className="card-title">
                         <strong>{review.author?.username.charAt(0).toUpperCase() + review.author?.username.slice(1)}</strong>
@@ -183,40 +183,43 @@ const Show = () => {
 
     return (
         <>
-            <div className="row justify-content-center">
-                <div className="col-12 col-lg-6 ">
-                    <div className="card mb-3">
-                        <img src={escape.image} className="card-img-top" alt={escape.title}/>
-                        <div className="card-body">
-                            <h5 className="card-title">{escape.title}</h5>
-                            <p className="card-text">{escape.description}</p>
+            {/* <div className="d-flex"> */}
+                <div className="row">
+                    <div className="col-12 col-lg-6 ">
+                        <div className="card mb-3">
+                            <img src={escape.image} className="card-img-top" alt={escape.title}/>
+                            <div className="card-body">
+                                <h5 className="card-title">{escape.title}</h5>
+                                <p className="card-text">{escape.description}</p>
+                            </div>
+                            <ul className="list-group list-group-flush">
+                                <li className="list-group-item text-muted">{escape.location}</li>
+                                <li className="list-group-item">Submitted by {escape.author?.username}</li>
+                                <li className="list-group-item">₹{escape.price} per person / day</li>
+                            </ul>
+                            {
+                                user && escape.author?._id === user._id && (
+                                    <div className="card-body">
+                                        <Link to={`/escapes/${id}/edit`} className="card-link btn btn-info">Edit</Link>
+                                        <button onClick={onDelete} className='btn btn-danger ms-2'>Delete</button>
+                                    </div>
+                                )
+                            }
                         </div>
-                        <ul className="list-group list-group-flush">
-                            <li className="list-group-item text-muted">{escape.location}</li>
-                            <li className="list-group-item">Submitted by {escape.author?.username}</li>
-                            <li className="list-group-item">₹{escape.price} per person / day</li>
-                        </ul>
-                        {
-                            user && escape.author?._id === user._id && (
-                                <div className="card-body">
-                                    <Link to={`/escapes/${id}/edit`} className="card-link btn btn-info">Edit</Link>
-                                    <button onClick={onDelete} className='btn btn-danger ms-2'>Delete</button>
-                                </div>
-                            )
-                        }
+                        <Link className="card-link btn btn-success" to={'/escapes'}>Back to Escapes</Link>
                     </div>
-                    <Link className="card-link btn btn-success" to={'/escapes'}>Back to Escapes</Link>
-                </div>
-                
-                {
-                    escape.reviews && isAuthenticated && (
+                    
+                    {/* {console.log(escape.reviews)} */}
+                    
+                    {
                         <div className="col-12 col-lg-6">
                             {isAuthenticated ? (<ReviewForm />) : (null)}
-                            <ReviewList />
+                            {escape.reviews?.length  ? (<ReviewList />) : (<h3>No reviews yet.</h3>)}
                         </div>
-                    )
-                }
-            </div>
+                    }
+
+                </div>
+            {/* </div> */}
             
         </>
     )
