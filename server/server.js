@@ -46,6 +46,7 @@ const sessionConfig = {
 
 app.use(session(sessionConfig));
 app.use(cors(corsOptions));
+app.use(helmet());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
