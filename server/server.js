@@ -24,7 +24,10 @@ db.once("open", () => {
 const app = express();
 
 const corsOptions = {
-    origin: "http://localhost:3000",
+    origin: [
+        "http://localhost:3000",
+        "https://globetrotters-six.vercel.app/"
+    ],
     credentials: true,
 }
 
@@ -72,7 +75,8 @@ app.use((err, req, res, next) => {
     res.status(statusCode).send(message);
 })
 
+const port = process.env.PORT || 3001;
 
-app.listen(3001, () => {
-    console.log("Serving on port 3001");
+app.listen(port, () => {
+    console.log(`Serving on port ${port}`);
 })
