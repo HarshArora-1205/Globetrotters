@@ -9,6 +9,7 @@ import Show from "./views/escapes/Show";
 import Edit from "./views/escapes/Edit";
 import New from "./views/escapes/New";
 import Error from "./views/Error";
+import NotFound from "./views/NotFound";
 import Login from "./views/auth/Login";
 import Register from "./views/auth/Register";
 import { AuthProvider } from "./context/AuthContext";
@@ -30,7 +31,8 @@ function App() {
             <Route path="/auth/register" element={<Register />}/>
             <Route path="/escapes/new" element={<New />}/>
             <Route path="/error" element={<Error />}/>
-          </Route>
+            <Route path="*" element={<NotFound />}/>
+          </Route>  
         </Routes>
         <ToastContainer position="top-right" />
       </BrowserRouter>
