@@ -10,6 +10,7 @@ import passport from "passport";
 import LocalStrategy from "passport-local";
 import User from "./models/User.js";
 import dotenv from "dotenv";
+import helmet from "helmet";
 
 dotenv.config();
 
