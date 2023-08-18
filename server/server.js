@@ -27,9 +27,9 @@ const app = express();
 const corsOptions = {
     origin: [
         "http://localhost:3000",
-        "https://globetrotters-harsh1205.vercel.app/",
-        "https://globetrotters-git-main-harsh1205.vercel.app/",
-        "https://globetrotters-star.vercel.app/"
+        "https://globetrotters-harsh1205.vercel.app",
+        "https://globetrotters-git-main-harsh1205.vercel.app",
+        "https://globetrotters-star.vercel.app"
 
     ],
     credentials: true,
